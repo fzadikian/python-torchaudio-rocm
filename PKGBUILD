@@ -2,19 +2,19 @@
 # Contributer: Jingbei Li <i@jingbei.li>
 # Contributer: Jose Riha <jose1711 gmail com>
 
-pkgname=python-torchaudio
+pkgname=python-torchaudio-rocm
 _pkgname=audio
 pkgver=0.13.1
 _sox_ver=14.4.2
 pkgrel=1
-pkgdesc="Data manipulation and transformation for audio signal processing, powered by PyTorch"
+pkgdesc="Data manipulation and transformation for audio signal processing, powered by PyTorch (ROCm Support)"
 arch=('x86_64' 'i686')
 url="https://github.com/pytorch/audio"
 license=('BSD')
 depends=('python' 'python-pytorch' 'bzip2' 'xz' 'opencore-amr' 'lame' 'libogg' 'libFLAC.so' 'libvorbis' 'opus' 'opusfile' 'zlib')
 optdepends=('python-kaldi-io')
 makedepends=('git' 'python-setuptools' 'cmake' 'ninja' 'gcc11' 'boost')
-conflicts=('python-torchaudio-git')
+conflicts=('python-torchaudio-git' 'python-torchaudio')
 source=("git+$url#tag=v${pkgver}"
         "git+https://github.com/kaldi-asr/kaldi.git"
         "git+https://github.com/kpu/kenlm.git"
@@ -53,21 +53,15 @@ prepare() {
 build() {
   cd "$srcdir/${_pkgname}"
 
-  # Allow this to build with CUDA, which is not compatible with GCC 12 yet
+  # Allow this to build with ROCm, which is not compatible with GCC 12 yet
   export CC=/usr/bin/gcc-11
   export CXX=/usr/bin/g++-11
-  export CUDACXX=/opt/cuda/bin/nvcc
-  export CUDAHOSTCXX=$CXX
-  # Follow architectures used by pytorch
-  # https://github.com/archlinux/svntogit-community/blob/packages/python-pytorch/trunk/PKGBUILD
-  export TORCH_CUDA_ARCH_LIST="5.2;5.3;6.0;6.1;6.2;7.0;7.2;7.5;8.0;8.6;8.9;9.0;9.0+PTX"
-
-  CUDA_HOME=/opt/cuda/ BUILD_SOX=1 python setup.py build
+  BUILD_SOX=1 USE_ROCM=1 ROCclr_DIR=/opt/rocm/ python3 setup.py build
 }
 
 package() {
   cd "$srcdir/${_pkgname}"
-  BUILD_SOX=1 python setup.py install --root="$pkgdir"/ --optimize=1
+  BUILD_SOX=1 USE_ROCM=1 ROCclr_DIR=/opt/rocm/ python3 setup.py install --root="$pkgdir"/ --optimize=1
   install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }
 
