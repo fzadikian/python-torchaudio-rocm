@@ -1,9 +1,10 @@
-# Maintainer: Jingbei Li <i@jingbei.li>
+# Maintainer: francisco1892 <admin@gnlug.org>
+# Contributer: Jingbei Li <i@jingbei.li>
 # Contributer: Jose Riha <jose1711 gmail com>
 
 pkgname=python-torchaudio
 _pkgname=audio
-pkgver=0.13.0
+pkgver=0.13.1
 _sox_ver=14.4.2
 pkgrel=1
 pkgdesc="Data manipulation and transformation for audio signal processing, powered by PyTorch"
@@ -25,8 +26,8 @@ sha256sums=('SKIP'
             'SKIP'
             'SKIP'
             'SKIP'
-            '81a6956d4330e75b5827316e44ae381e6f1e8928003c6aa45896da9041ea149c'
-            '1dcf13e8893d780ed730121fd607e9ccedfa47e380fd7e594f21b77aa7cd1720')
+            'SKIP'
+            'SKIP')
 
 prepare() {
   cd "$srcdir/${_pkgname}"
