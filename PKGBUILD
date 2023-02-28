@@ -33,6 +33,7 @@ prepare() {
   cd "$srcdir/${_pkgname}"
 
   mkdir -p third_party/archives
+  rm -f third_party/archives/sox-$_sox_ver.tar.bz2
   ln -s "$srcdir"/sox-$_sox_ver.tar.bz2 third_party/archives/
 
   patch -Np1 -i ../use-system-libs.diff
@@ -48,6 +49,7 @@ prepare() {
   git -c protocol.file.allow=always submodule update third_party/kaldi/submodule
   git -c protocol.file.allow=always submodule update third_party/kenlm/kenlm
   git -c protocol.file.allow=always submodule update third_party/flashlight-text/submodule
+  cp -v ../../LoadHIP.cmake cmake/LoadHIP.cmake
 }
 
 build() {
